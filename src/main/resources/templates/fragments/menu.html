@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <title>Menu</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+</head>
+
+<body>
+<div class="container-fluid fixed-top">
+  <div class="row" style="background-color: white">
+      <img class="my-2 ml-3" th:src="@{/img/logo.png}" style="max-width:27%;" alt="Logo">
+  </div>
+  <div class="row mb-5" style="background-color: #128499;">
+    <div class="col" style="margin: 15px;">
+      <div class="row justify-content-end font-weight-bold">
+          <a class="mr-5" href="/home" style="color: white;">Home</a>
+          <a class="mx-5" href="/patient/list" style="color: white;">Patient</a>
+          <a class="mx-5" href="/contact" style="color: white;">Contact</a>
+          <a class="mx-5" href="/resources" style="color: white;">Resources</a>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>

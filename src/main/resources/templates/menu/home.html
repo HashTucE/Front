@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <title>Note List</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+</head>
+
+<body>
+<div class="container">
+
+  <div th:replace="~{fragments/menu :: div}"></div>
+  <div class="row" style="height: 16rem"></div>
+
+  <div class="row">
+    <div class="col-sm-4 mt-5 pt-5">
+      <h2 class="font-weight-bold mb-5" style="color: #128499;">We care.</h2>
+      <p>Mediscreen specializes in detecting risk factors for disease. Our screenings using predictive analysis of patient populations at an affordable cost.</p>
+      <li>Are you a small or rural clinic or practise?</li>
+      <li>Do you need screening for heart disease or hypertension precursors?</li>
+      <h4 class="font-weight-bold mt-5" style="color: #128499;">We have a solution for you.</h4>
+
+
+    </div>
+    <div class="col-sm-8">
+      <img class="my-2 ml-3" th:src="@{/img/family.png}" style="height: 35rem" alt="Family">
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <div class="row" style="height: 2rem"></div>
+</div>
+
+</body>
+
+<footer>
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</footer>
+
+</html>

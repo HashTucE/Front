@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8"/>
+  <title>Patient List</title>
+  <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+</head>
+
+<body>
+<div class="container">
+
+  <div th:replace="~{fragments/menu :: div}"></div>
+  <div class="row" style="height: 16rem"></div>
+
+  <h2 class="font-weight-bold" style="color: #128499;">Patient List</h2>
+  <table class="table">
+    <thead>
+    <tr>
+      <th>Id</th>
+      <th>Last Name</th>
+      <th>First Name</th>
+      <th>Birthdate</th>
+      <th>Sex</th>
+      <th>Address</th>
+      <th>Phone</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="patient : ${patients}">
+      <td th:text="${patient.id}"></td>
+      <td><a th:href="@{/record/patient/{id}(id=${patient.id})}" th:text="${patient.lastName}" style="color: #128499;"></a></td>
+      <td th:text="${patient.firstName}"></td>
+      <td th:text="${patient.birthdate}"></td>
+      <td th:text="${patient.sex}"></td>
+      <td th:text="${patient.address}"></td>
+      <td th:text="${patient.phone}"></td>
+      <td style="width: 15%" class="text-center">
+        <div class="edit-delete">
+          <form th:action="@{/patient/update/{id}(id=${patient.id})}" method="get" style="display:inline-block;">
+            <input type="hidden" name="_method" value="delete">
+            <button style="background-color: Transparent;
+            background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  color: blue;">Edit</button>
+          </form>&nbsp;&nbsp;|&nbsp;
+          <form th:action="@{/patient/delete/{id}(id=${patient.id})}" method="post" style="display:inline-block;">
+            <input type="hidden" name="_method" value="delete">
+            <button style="background-color: Transparent;
+            background-repeat:no-repeat;
+  border: none;
+  cursor:pointer;
+  overflow: hidden;
+  outline:none;
+  color: red;">Delete</button>
+          </form>
+        </div>
+      </td>
+    </tr>
+    <tr>
+      <td colspan="8" class="text-right">
+        <a class="btn btn-primary" th:href="@{/patient/add}">Add Patient</a>
+      </td>
+    </tr>
+    </tbody>
+  </table>
+  <div class="row" style="height: 2rem"></div>
+</div>
+</body>
+
+<footer>
+  <div th:replace="~{fragments/footer :: footer}"></div>
+</footer>
+
+</html>
