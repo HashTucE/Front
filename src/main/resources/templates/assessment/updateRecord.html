@@ -7,6 +7,26 @@
   <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
 </head>
 
+<style>
+  .auto-height {
+  border: none;
+  resize: none;
+}
+</style>
+
+<script>
+  function autoExpand(textarea) {
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+  }
+  window.onload = function() {
+    var textareas = document.getElementsByTagName('textarea');
+    for (var i = 0; i < textareas.length; i++) {
+      autoExpand(textareas[i]);
+    }
+  }
+</script>
+
 <body>
 <div class="container">
 
@@ -39,7 +59,9 @@
         </thead>
         <tbody>
         <tr th:each="note : ${record.notes}">
-          <td th:text="${note.note}"></td>
+          <td>
+            <textarea readonly th:text="${note.note}" class="form-control bg-transparent auto-height" onload="autoExpand(this)"></textarea>
+          </td>
           <td th:text="${note.date}"></td>
           <td style="width: 15%" class="text-center">
             <div class="edit-delete">
@@ -70,7 +92,7 @@
       </table>
       <form th:action="@{/record/patient/{patientId}/updateNote/{noteId}(patientId=${noteDto.patientId},noteId=${noteDto.id})}" th:object="${noteDto}" method="post">
         <div class="form-group">
-          <input type="text" class="form-control" id="note" th:field="*{note}" required placeholder="Note is mandatory"/>
+          <textarea class="form-control" id="note" th:field="*{note}" required placeholder="Note is mandatory" oninput="autoExpand(this)"></textarea>
         </div>
         <div class="text-right">
           <a th:href="@{/record/patient/{patientId}(patientId=${noteDto.patientId})}" class="btn btn-danger mr-2">Back</a>

@@ -126,8 +126,7 @@ public class PatientController {
     @Operation(summary = "Update an existing patient", description = "Update an existing patient")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "302", description = "Patient updated successfully and redirected to the patient list page"),
-            @ApiResponse(responseCode = "400", description = "Bad request, validation error(s) occurred"),
-            @ApiResponse(responseCode = "404", description = "Patient with the specified ID not found") })
+            @ApiResponse(responseCode = "400", description = "Bad request, validation error(s) occurred")})
     public String updatePatient(@PathVariable int id, @Valid PatientDto patientDto, BindingResult result) {
         log.debug("Updating patient with id {}", id);
         if (!result.hasErrors()) {
