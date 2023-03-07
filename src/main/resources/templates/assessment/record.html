@@ -58,7 +58,7 @@
   <div class="row" style="height: 16rem"></div>
 
   <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-4 mt-5">
       <h2 class="font-weight-bold mb-5" style="color: #128499;">Record</h2>
       <p><strong><u>Patient:</u></strong> <span th:text="${record.firstName}"></span> <span th:text="${record.lastName}"></span></p>
       <p><strong><u>Age:</u></strong> <span th:text="${record.age}"></span> years</p>
@@ -74,8 +74,8 @@
                th:text="${record.assessment}"
                th:style="${record.assessment == 'None' ? 'color: green;' : (record.assessment == 'Borderline' ? 'color: #FCBB40;' : (record.assessment == 'In Danger' ? 'color: orange;' : 'color: red;'))}"></span></h1>
       </div>
-      </div>
-    <div class="col-sm-8">
+    </div>
+    <div class="col-sm-8 mt-5">
       <h2 class="font-weight-bold mb-5" style="color: #128499;">Notes</h2>
       <div id="notes-table">
         <table class="table table-striped">

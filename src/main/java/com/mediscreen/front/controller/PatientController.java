@@ -110,11 +110,6 @@ public class PatientController {
         log.info("Displaying the form for updating the patient with id: {}", id);
         PatientDto patientDto = patientProxy.findPatientById(id);
         model.addAttribute("patientDto", patientDto);
-
-        LocalDate birthdate = patientDto.getBirthdate();
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
-        String birthdateAsString = formatter.format(birthdate);
-        model.addAttribute("birthdate", birthdateAsString);
         return "patient/update";
     }
 

@@ -13,7 +13,7 @@
   <div th:replace="~{fragments/menu :: div}"></div>
   <div class="row" style="height: 16rem"></div>
 
-  <h2 class="font-weight-bold" style="color: #128499;">Update Patient</h2>
+  <h2 class="font-weight-bold mt-5 mb-5" style="color: #128499;">Update Patient</h2>
   <form th:action="@{/patient/update/{id}(id=${patientDto.id})}" th:object="${patientDto}" method="post">
     <div class="form-group">
       <label for="lastName">Last Name:</label>
@@ -27,8 +27,8 @@
     </div>
     <div class="form-group">
       <label for="birthdate">Birthdate:</label>
-      <input type="date" class="form-control" id="birthdate" th:field="*{birthdate}" th:value="${patientDto.birthdate}"/>
-      <p class="text-danger" th:if="${#fields.hasErrors('birthdate')}">Birthdate is mandatory</p>
+      <input type="text" class="form-control" id="birthdate" th:field="*{birthdate}" placeholder="DD/MM/YYYY"/>
+      <p class="text-danger" th:if="${#fields.hasErrors('birthdate')}"></p>
     </div>
     <div class="form-group">
       <label for="sex">Sex:</label>
@@ -40,12 +40,13 @@
       <input type="text" class="form-control" id="address" th:field="*{address}"/>
       <p class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></p>
     </div>
-    <div class="form-group">
+    <div class="form-group mb-5">
       <label for="phone">Phone:</label>
       <input type="text" class="form-control" id="phone" th:field="*{phone}"/>
       <p class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></p>
     </div>
     <button type="submit" class="btn btn-primary">Update</button>
+    <a th:href="@{/patient/list}" class="btn btn-danger ml-2">Cancel</a>
   </form>
 </div>
 </body>

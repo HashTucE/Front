@@ -58,7 +58,7 @@
   <div class="row" style="height: 16rem"></div>
 
   <div class="row">
-    <div class="col-sm-4">
+    <div class="col-sm-4 mt-5">
       <h2 class="font-weight-bold mb-5" style="color: #128499;">Record</h2>
       <p><strong><u>Patient:</u></strong> <span th:text="${record.firstName}"></span> <span th:text="${record.lastName}"></span></p>
       <p><strong><u>Age:</u></strong> <span th:text="${record.age}"></span> years</p>
@@ -75,7 +75,7 @@
                                       th:style="${record.assessment == 'None' ? 'color: green;' : (record.assessment == 'Borderline' ? 'color: #FCBB40;' : (record.assessment == 'In Danger' ? 'color: orange;' : 'color: red;'))}"></span></h1>
       </div>
     </div>
-    <div class="col-sm-8">
+    <div class="col-sm-8 mt-5">
       <h2 class="font-weight-bold mb-5" style="color: #128499;">Notes</h2>
       <div id="notes-table">
         <table class="table table-striped">
@@ -119,7 +119,7 @@
             <textarea class="form-control" id="note" th:field="*{note}" placeholder="Note cannot be empty" oninput="autoExpand(this)"></textarea>
           </div>
           <div class="text-right">
-            <a th:href="@{/record/patient/{patientId}(patientId=${noteDto.patientId})}" class="btn btn-danger mr-2">Back</a>
+            <a th:href="@{/record/patient/{patientId}(patientId=${noteDto.patientId})}" class="btn btn-danger mr-2">Cancel</a>
             <button type="submit" class="btn btn-primary">Update Note</button>
           </div>
         </form>
