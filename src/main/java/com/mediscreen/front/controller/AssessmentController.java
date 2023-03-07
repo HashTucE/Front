@@ -56,6 +56,32 @@ public class AssessmentController {
     }
 
 
+    @PostMapping("/record/patient/{patientId}/addNote")
+    @Operation(summary = "Add a new note for a patient",
+            description = "Adds a new note for the patient with the given ID.")
+    @ApiResponse(responseCode = "302", description = "Note added successfully",
+            content = @Content(mediaType = "text/html", schema = @Schema(type = "string")))
+    @ApiResponse(responseCode = "400", description = "Invalid note data provided")
+    public String addNote(@Parameter(description = "ID of the patient to add a note for", required = true) @PathVariable int patientId,
+                          @Parameter(description = "DTO object containing the new note information", required = true) @Valid NoteDto noteDto,
+                          BindingResult result, Model model) {
+
+        if (result.hasErrors()) {
+            log.info("Validation errors for new note: {}", noteDto);
+            RecordDto record = assessmentProxy.generateRecord(patientId);
+            model.addAttribute("record", record);
+            model.addAttribute("noteDto", noteDto);
+            return "assessment/record";
+        }
+
+        log.info("Validating a new note: {}", noteDto);
+        noteDto.setPatientId(patientId);
+        noteProxy.validateNote(noteDto);
+
+        return "redirect:/record/patient/" + patientId;
+    }
+
+
     /**
      * Handles GET requests for displaying a form to update a note.
      * @param patientId the ID of the patient.
@@ -113,5 +139,24 @@ public class AssessmentController {
         noteProxy.updateNote(noteId, noteDto);
         log.info("Note with id {} was successfully updated", noteId);
         return "redirect:/record/patient/" + record.getPatientId();
+    }
+
+
+    /**
+     Handles the request to delete a note.
+     @param id the id of the note to delete
+     @return the view of the note list page
+     */
+    @PostMapping("/record/patient/{patientId}/deleteNote/{id}")
+    @Operation(summary = "Delete a note for a patient",
+            description = "Deletes the note with the given ID for the patient with the given ID.")
+    @ApiResponse(responseCode = "302", description = "Note deleted successfully",
+            content = @Content(mediaType = "text/html", schema = @Schema(type = "string")))
+    public String deleteNote(@Parameter(description = "ID of the patient to delete a note for", required = true) @PathVariable int patientId,
+                             @Parameter(description = "ID of the note to delete", required = true) @PathVariable int id) {
+        log.debug("Deleting note with id {}", id);
+        noteProxy.deleteNote(id);
+        log.info("Note with id {} was successfully deleted", id);
+        return "redirect:/record/patient/" + patientId;
     }
 }

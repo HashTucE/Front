@@ -13,6 +13,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
+import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.BindingResult;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -30,6 +31,8 @@ public class AssessmentControllerTest {
     private NoteProxy noteProxy;
     @Mock
     private BindingResult result;
+    @Mock
+    private Model model;
 
 
     @Test
@@ -49,6 +52,47 @@ public class AssessmentControllerTest {
         assertEquals("assessment/record", result);
         assertEquals(expectedRecordDto, model.getAttribute("record"));
         assertNotNull(model.getAttribute("noteDto"));
+    }
+
+
+    @Test
+    @DisplayName("Should add a new note for a patient")
+    public void addNoteTest() {
+
+        // Arrange
+        int patientId = 1;
+        NoteDto noteDto = new NoteDto();
+        noteDto.setPatientId(patientId);
+        BindingResult result = new BeanPropertyBindingResult(noteDto, "noteDto");
+        Model model = new ExtendedModelMap();
+
+        // Act
+        String resultUrl = assessmentController.addNote(patientId, noteDto, result, model);
+
+        // Assert
+        assertEquals("redirect:/record/patient/" + patientId, resultUrl);
+        assertFalse(result.hasErrors());
+    }
+
+
+    @Test
+    @DisplayName("Should return error message for invalid note data provided")
+    public void addNoteNegativeTest() {
+
+        // Arrange
+        int patientId = 1;
+        NoteDto noteDto = new NoteDto();
+        noteDto.setPatientId(patientId);
+        when(result.hasErrors()).thenReturn(true);
+        RecordDto recordDto = new RecordDto();
+        when(assessmentProxy.generateRecord(patientId)).thenReturn(recordDto);
+
+        // Act
+        String resultUrl = assessmentController.addNote(patientId, noteDto, result, model);
+
+        // Assert
+        assertEquals("assessment/record", resultUrl);
+        assertTrue(result.hasErrors());
     }
 
 
@@ -77,8 +121,30 @@ public class AssessmentControllerTest {
 
 
     @Test
+    @DisplayName("Should redirect to record patient")
+    public void submitUpdateNoteTest() {
+
+        // Arrange
+        int patientId = 1;
+        int noteId = 2;
+        NoteDto noteDto = new NoteDto(patientId, "n");
+        RecordDto recordDto = new RecordDto();
+        recordDto.setPatientId(patientId);
+        when(assessmentProxy.generateRecord(patientId)).thenReturn(recordDto);
+        when(result.hasErrors()).thenReturn(false);
+
+        // Act
+        String resultUrl = assessmentController.submitUpdateNote(patientId, noteId, noteDto, result, model);
+
+        // Assert
+        assertEquals("redirect:/record/patient/" + recordDto.getPatientId(), resultUrl);
+        verify(noteProxy, times(1)).updateNote(noteId, noteDto);
+    }
+
+
+    @Test
     @DisplayName("Should redirect to update note form when validation fails")
-    public void submitUpdateNoteValidationFailureTest() {
+    public void submitUpdateNoteNegativeTest() {
 
         // Arrange
         int patientId = 1;
@@ -100,5 +166,23 @@ public class AssessmentControllerTest {
         assertTrue(model.containsAttribute("patientId"));
         assertEquals(record, model.getAttribute("record"));
     }
+
+
+    @Test
+    @DisplayName("Should delete note for patient redirecting to record")
+    public void deleteNoteTest() {
+
+        // Arrange
+        int patientId = 1;
+        int noteId = 2;
+        doNothing().when(noteProxy).deleteNote(noteId);
+
+        // Act
+        String result = assessmentController.deleteNote(patientId, noteId);
+
+        // Assert
+        assertEquals("redirect:/record/patient/" + patientId, result);
+    }
+
 
 }

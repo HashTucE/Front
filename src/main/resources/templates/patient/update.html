@@ -27,7 +27,7 @@
     </div>
     <div class="form-group">
       <label for="birthdate">Birthdate:</label>
-      <input type="date" class="form-control" id="birthdate" th:field="*{birthdate}" th:value="${birthdate}"/>
+      <input type="date" class="form-control" id="birthdate" th:field="*{birthdate}" th:value="${patientDto.birthdate}"/>
       <p class="text-danger" th:if="${#fields.hasErrors('birthdate')}">Birthdate is mandatory</p>
     </div>
     <div class="form-group">
@@ -47,7 +47,6 @@
     </div>
     <button type="submit" class="btn btn-primary">Update</button>
   </form>
-  <div class="row" style="height: 2rem"></div>
 </div>
 </body>
 

@@ -112,7 +112,8 @@ public class PatientController {
         model.addAttribute("patientDto", patientDto);
 
         LocalDate birthdate = patientDto.getBirthdate();
-        String birthdateAsString = birthdate.format(DateTimeFormatter.ofPattern("dd-MM-yyyy"));
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy");
+        String birthdateAsString = formatter.format(birthdate);
         model.addAttribute("birthdate", birthdateAsString);
         return "patient/update";
     }
