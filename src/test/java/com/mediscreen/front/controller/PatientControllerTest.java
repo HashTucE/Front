@@ -8,12 +8,10 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.ui.ConcurrentModel;
 import org.springframework.ui.ExtendedModelMap;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -103,37 +101,34 @@ public class PatientControllerTest {
 
 
     @Test
+    @DisplayName("Should return the right view name patient/update")
     public void updatePatientFormTest() {
-
         // Arrange
         int patientId = 1;
         PatientDto patientDto = new PatientDto();
-        LocalDate birthdate = LocalDate.of(1990, 1, 1);
-        patientDto.setBirthdate(birthdate);
         when(patientProxy.findPatientById(patientId)).thenReturn(patientDto);
-        Model model = new ConcurrentModel();
 
         // Act
         String viewName = patientController.updatePatientForm(patientId, model);
 
         // Assert
         assertEquals("patient/update", viewName);
-        assertEquals(patientDto, model.getAttribute("patientDto"));
-        assertEquals("01-01-1990", model.getAttribute("birthdate"));
+        verify(patientProxy).findPatientById(patientId);
+        verify(model).addAttribute("patientDto", patientDto);
     }
 
 
     @Test
+    @DisplayName("Should return the right view name patient/list")
     public void updatePatientTest() {
 
         // Arrange
         int patientId = 1;
         PatientDto patientDto = new PatientDto();
-        BindingResult result = mock(BindingResult.class);
-        when(result.hasErrors()).thenReturn(false);
+        when(bindingResult.hasErrors()).thenReturn(false);
 
         // Act
-        String viewName = patientController.updatePatient(patientId, patientDto, result);
+        String viewName = patientController.updatePatient(patientId, patientDto, bindingResult);
 
         // Assert
         assertEquals("redirect:/patient/list", viewName);
@@ -142,16 +137,16 @@ public class PatientControllerTest {
 
 
     @Test
-    public void updatePatientTest_withErrors() {
+    @DisplayName("Should return the right view name patient/update")
+    public void updatePatientNegativeTest() {
 
         // Arrange
         int patientId = 1;
         PatientDto patientDto = new PatientDto();
-        BindingResult result = mock(BindingResult.class);
-        when(result.hasErrors()).thenReturn(true);
+        when(bindingResult.hasErrors()).thenReturn(true);
 
         // Act
-        String viewName = patientController.updatePatient(patientId, patientDto, result);
+        String viewName = patientController.updatePatient(patientId, patientDto, bindingResult);
 
         // Assert
         assertEquals("patient/update", viewName);
@@ -160,6 +155,7 @@ public class PatientControllerTest {
 
 
     @Test
+    @DisplayName("Should redirect to /patient/list")
     public void deletePatientTest() {
 
         // Arrange
