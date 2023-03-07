@@ -79,14 +79,17 @@ public class PatientController {
     @PostMapping("/patient/validate")
     @Operation(summary = "Add a new patient", description = "Adds a new patient to the system.")
     @ApiResponse(responseCode = "302", description = "Patient validated and redirected to the list page.")
-    public String addPatient(@Valid PatientDto patientDto, BindingResult result) {
+    public String addPatient(@Valid PatientDto patientDto, BindingResult result, Model model) {
 
-        if (!result.hasErrors()) {
-            log.info("Validating a new patient: {}", patientDto);
-            patientProxy.validatePatient(patientDto);
-            return "redirect:/patient/list";
+        if (result.hasErrors()) {
+            log.info("Validation errors for new patient: {}", patientDto);
+            model.addAttribute("patientDto", patientDto);
+            return "/patient/add";
         }
-        return "/patient/add";
+
+        log.info("Validating a new patient: {}", patientDto);
+        patientProxy.validatePatient(patientDto);
+        return "/patient/list";
     }
 
 

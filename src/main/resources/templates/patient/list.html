@@ -5,6 +5,34 @@
   <meta charset="utf-8"/>
   <title>Patient List</title>
   <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
+
+  <style>
+  table.table-striped tbody tr:nth-of-type(odd) {
+    background-color: transparent;
+  }
+  table.table-striped tbody tr:nth-of-type(even) {
+  background-color: #a9d4eb;
+  }
+  table.table-striped thead tr:nth-of-type(odd) {
+    background-color: #128499;
+    color: white;
+  }
+  </style>
+
+  <script>
+    $(document).ready(function() {
+          $('#patients-table table').DataTable( {
+              orderFixed: [ 0, 'asc' ],
+              paging: true,
+              info: false,
+              searching: true
+          });
+      });
+  </script>
 </head>
 
 <body>
@@ -13,62 +41,49 @@
   <div th:replace="~{fragments/menu :: div}"></div>
   <div class="row" style="height: 16rem"></div>
 
-  <h2 class="font-weight-bold" style="color: #128499;">Patient List</h2>
-  <table class="table">
-    <thead>
-    <tr>
-      <th>Id</th>
-      <th>Last Name</th>
-      <th>First Name</th>
-      <th>Birthdate</th>
-      <th>Sex</th>
-      <th>Address</th>
-      <th>Phone</th>
-      <th>Action</th>
-    </tr>
-    </thead>
-    <tbody>
-    <tr th:each="patient : ${patients}">
-      <td th:text="${patient.id}"></td>
-      <td><a th:href="@{/record/patient/{id}(id=${patient.id})}" th:text="${patient.lastName}" style="color: #128499;"></a></td>
-      <td th:text="${patient.firstName}"></td>
-      <td th:text="${patient.birthdate}"></td>
-      <td th:text="${patient.sex}"></td>
-      <td th:text="${patient.address}"></td>
-      <td th:text="${patient.phone}"></td>
-      <td style="width: 15%" class="text-center">
-        <div class="edit-delete">
-          <form th:action="@{/patient/update/{id}(id=${patient.id})}" method="get" style="display:inline-block;">
-            <input type="hidden" name="_method" value="delete">
-            <button style="background-color: Transparent;
-            background-repeat:no-repeat;
-  border: none;
-  cursor:pointer;
-  overflow: hidden;
-  outline:none;
-  color: blue;">Edit</button>
-          </form>&nbsp;&nbsp;|&nbsp;
-          <form th:action="@{/patient/delete/{id}(id=${patient.id})}" method="post" style="display:inline-block;">
-            <input type="hidden" name="_method" value="delete">
-            <button style="background-color: Transparent;
-            background-repeat:no-repeat;
-  border: none;
-  cursor:pointer;
-  overflow: hidden;
-  outline:none;
-  color: red;">Delete</button>
-          </form>
-        </div>
-      </td>
-    </tr>
-    <tr>
-      <td colspan="8" class="text-right">
-        <a class="btn btn-primary" th:href="@{/patient/add}">Add Patient</a>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-  <div class="row" style="height: 2rem"></div>
+  <h2 class="font-weight-bold mb-5" style="color: #128499;">Patient List</h2>
+  <div id="patients-table">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th>Last Name</th>
+        <th>First Name</th>
+        <th>Birthdate</th>
+        <th>Sex</th>
+        <th>Address</th>
+        <th>Phone</th>
+        <th>Action</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="patient : ${patients}">
+        <td><a th:href="@{/record/patient/{id}(id=${patient.id})}" th:text="${patient.lastName}" style="color: #128499;"></a></td>
+        <td th:text="${patient.firstName}"></td>
+        <td th:text="${patient.birthdate}"></td>
+        <td th:text="${patient.sex}"></td>
+        <td th:text="${patient.address}"></td>
+        <td th:text="${patient.phone}"></td>
+        <td style="width: 15%" class="text-center">
+          <div class="edit-delete">
+            <form th:action="@{/patient/update/{id}(id=${patient.id})}" method="get" style="display:inline-block;">
+              <input type="hidden" name="_method" value="delete">
+              <button type="submit" title="Edit the note" style="background-color:transparent;border:none;">
+                <i class="fa fa-edit" style="font-size:24px;color:blue"></i>
+              </button>
+            </form>
+            <form th:action="@{/patient/delete/{id}(id=${patient.id})}" method="post" style="display:inline-block;">
+              <input type="hidden" name="_method" value="delete">
+              <button type="submit" title="Delete the note" style="background-color:transparent;border:none;">
+                <i class="fa fa-trash-o" style="font-size:24px;color:red"></i>
+              </button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+  <a class="btn btn-primary mt-3" th:href="@{/patient/add}">Add Patient</a>
 </div>
 </body>
 

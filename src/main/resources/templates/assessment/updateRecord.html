@@ -5,27 +5,51 @@
   <meta charset="utf-8"/>
   <title>Patient Record</title>
   <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
-</head>
+  <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.13.3/css/jquery.dataTables.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <script type="text/javascript" charset="utf8" src="https://code.jquery.com/jquery-3.5.1.js"></script>
+  <script type="text/javascript" src="https://cdn.datatables.net/1.13.3/js/jquery.dataTables.min.js"></script>
 
-<style>
-  .auto-height {
-  border: none;
-  resize: none;
-}
-</style>
-
-<script>
-  function autoExpand(textarea) {
-    textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 'px';
+  <style>
+    .auto-height {
+    border: none;
+    resize: none;
   }
-  window.onload = function() {
-    var textareas = document.getElementsByTagName('textarea');
-    for (var i = 0; i < textareas.length; i++) {
-      autoExpand(textareas[i]);
+
+  table.table-striped tbody tr:nth-of-type(odd) {
+    background-color: transparent;
+  }
+  table.table-striped tbody tr:nth-of-type(even) {
+  background-color: #a9d4eb;
+  }
+  table.table-striped thead tr:nth-of-type(odd) {
+    background-color: #128499;
+    color: white;
+  }
+  </style>
+
+  <script>
+    function autoExpand(textarea) {
+      textarea.style.height = 'auto';
+      textarea.style.height = textarea.scrollHeight + 'px';
     }
-  }
-</script>
+    window.onload = function() {
+      var textareas = document.getElementsByTagName('textarea');
+      for (var i = 0; i < textareas.length; i++) {
+        autoExpand(textareas[i]);
+      }
+    }
+
+    $(document).ready(function() {
+          $('#notes-table table').DataTable( {
+              orderFixed: [ 1, 'asc' ],
+              paging: false,
+              info: false,
+              searching: false
+          });
+      });
+  </script>
+</head>
 
 <body>
 <div class="container">
@@ -36,69 +60,69 @@
   <div class="row">
     <div class="col-sm-4">
       <h2 class="font-weight-bold mb-5" style="color: #128499;">Record</h2>
-      <p>Patient: <span th:text="${record.firstName}"></span> <span th:text="${record.lastName}"></span></p>
-      <p>Sex: <span th:text="${record.sex}"></span></p>
-      <p>Birthdate: <span th:text="${record.birthdate}"></span></p>
-      <p>Address: <span th:text="${record.address}"></span></p>
-      <p>Phone: <span th:text="${record.phone}"></span></p>
-      <p>Age: <span th:text="${record.age}"></span> years</p>
-      <p>Diabetes assessment is:</p>
-      <h1><span class="badge font-weight-bold"
-                th:text="${record.assessment}"
-                th:style="${record.assessment == 'None' ? 'color: green;' : (record.assessment == 'Borderline' ? 'color: #FCBB40;' : (record.assessment == 'In Danger' ? 'color: orange;' : 'color: red;'))}"></span></h1>
+      <p><strong><u>Patient:</u></strong> <span th:text="${record.firstName}"></span> <span th:text="${record.lastName}"></span></p>
+      <p><strong><u>Age:</u></strong> <span th:text="${record.age}"></span> years</p>
+      <p><strong><u>Sex:</u></strong> <span th:text="${record.sex}"></span></p>
+      <p><strong><u>Birthdate:</u></strong> <span th:text="${record.birthdate}"></span></p>
+      <p><strong><u>Address:</u></strong> <span th:text="${record.address}"></span></p>
+      <p><strong><u>Phone:</u></strong> <span th:text="${record.phone}"></span></p>
+      <br>
+      <br>
+      <div class="border p-3 d-inline-block">
+        <p><strong><u>Diabetes assessment is:</u></strong></p>
+        <h1 class="text-center"><span class="badge font-weight-bold"
+                                      th:text="${record.assessment}"
+                                      th:style="${record.assessment == 'None' ? 'color: green;' : (record.assessment == 'Borderline' ? 'color: #FCBB40;' : (record.assessment == 'In Danger' ? 'color: orange;' : 'color: red;'))}"></span></h1>
+      </div>
     </div>
     <div class="col-sm-8">
       <h2 class="font-weight-bold mb-5" style="color: #128499;">Notes</h2>
-      <table class="table">
-        <thead>
-        <tr>
-          <th>Note</th>
-          <th>Date</th>
-          <th>Action</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr th:each="note : ${record.notes}">
-          <td>
-            <textarea readonly th:text="${note.note}" class="form-control bg-transparent auto-height" onload="autoExpand(this)"></textarea>
-          </td>
-          <td th:text="${note.date}"></td>
-          <td style="width: 15%" class="text-center">
-            <div class="edit-delete">
-              <form th:action="@{/record/patient/{patientId}/updateNote/{noteId}(patientId=${record.patientId},noteId=${note.id})}" method="get" style="display:inline-block;">
-                <input type="hidden" name="_method" value="update">
-                <button style="background-color: Transparent;
-              background-repeat:no-repeat;
-    border: none;
-    cursor: pointer;
-    overflow: hidden;
-    outline:none;
-    color: blue;">Edit</button>
-              </form>&nbsp;&nbsp;|&nbsp;
-              <form th:action="@{/note/delete/{patientId}/{id}(patientId=${record.patientId},id=${note.id})}" method="post" style="display:inline-block;">
-                <input type="hidden" name="_method" value="delete">
-                <button style="background-color: Transparent;
-              background-repeat:no-repeat;
-    border: none;
-    cursor: pointer;
-    overflow: hidden;
-    outline:none;
-    color: red;">Delete</button>
-              </form>
-            </div>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-      <form th:action="@{/record/patient/{patientId}/updateNote/{noteId}(patientId=${noteDto.patientId},noteId=${noteDto.id})}" th:object="${noteDto}" method="post">
-        <div class="form-group">
-          <textarea class="form-control" id="note" th:field="*{note}" required placeholder="Note is mandatory" oninput="autoExpand(this)"></textarea>
-        </div>
-        <div class="text-right">
-          <a th:href="@{/record/patient/{patientId}(patientId=${noteDto.patientId})}" class="btn btn-danger mr-2">Back</a>
-          <button type="submit" class="btn btn-primary">Update Note</button>
-        </div>
-      </form>
+      <div id="notes-table">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Note</th>
+            <th>Date</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr th:each="note : ${record.notes}">
+            <td>
+              <textarea readonly th:text="${note.note}" class="form-control bg-transparent auto-height" onload="autoExpand(this)"></textarea>
+            </td>
+            <td th:text="${note.date}"></td>
+            <td style="width: 15%" class="text-center">
+              <div class="edit-delete">
+                <form th:action="@{/record/patient/{patientId}/updateNote/{noteId}(patientId=${record.patientId},noteId=${note.id})}" method="get" style="display:inline-block;">
+                  <input type="hidden" name="_method" value="update">
+                  <button type="submit" title="Edit the note" style="background-color:transparent;border:none;">
+                    <i class="fa fa-edit" style="font-size:24px;color:blue"></i>
+                  </button>
+                </form>
+                <form th:action="@{/note/delete/{patientId}/{id}(patientId=${record.patientId},id=${note.id})}" method="post" style="display:inline-block;">
+                  <input type="hidden" name="_method" value="delete">
+                  <button type="submit" title="Delete the note" style="background-color:transparent;border:none;">
+                    <i class="fa fa-trash-o" style="font-size:24px;color:red"></i>
+                  </button>
+                </form>
+              </div>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="mt-5">
+        <form th:action="@{/record/patient/{patientId}/updateNote/{noteId}(patientId=${noteDto.patientId},noteId=${noteDto.id})}" th:object="${noteDto}" method="post">
+          <div class="form-group">
+            <textarea class="form-control" id="note" th:field="*{note}" required placeholder="Note is mandatory" oninput="autoExpand(this)"></textarea>
+          </div>
+          <div class="text-right">
+            <a th:href="@{/record/patient/{patientId}(patientId=${noteDto.patientId})}" class="btn btn-danger mr-2">Back</a>
+            <button type="submit" class="btn btn-primary">Update Note</button>
+          </div>
+        </form>
+      </div>
     </div>
   </div>
 

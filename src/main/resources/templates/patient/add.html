@@ -14,16 +14,16 @@
     <div class="row" style="height: 16rem"></div>
 
     <h2 class="font-weight-bold" style="color: #128499;">Add Patient</h2>
-    <form action="#" th:action="@{/patient/validate}" th:object="${patientDto}" method="post">
+    <form th:action="@{/patient/validate}" th:object="${patientDto}" method="post">
         <div class="form-group">
             <label for="lastName">Last Name:</label>
             <input type="text" class="form-control" id="lastName" th:field="*{lastName}"/>
-            <p class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}"></p>
+            <p class="text-danger" th:if="${#fields.hasErrors('lastName')}" th:errors="*{lastName}">Last Name is Mandatory</p>
         </div>
         <div class="form-group">
             <label for="firstName">First Name:</label>
             <input type="text" class="form-control" id="firstName" th:field="*{firstName}"/>
-            <p class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}"></p>
+            <p class="text-danger" th:if="${#fields.hasErrors('firstName')}" th:errors="*{firstName}">First Name is Mandatory</p>
         </div>
         <div class="form-group">
             <label for="birthdate">Birthdate:</label>
@@ -33,7 +33,7 @@
         <div class="form-group">
             <label for="sex">Sex:</label>
             <input type="text" class="form-control" id="sex" th:field="*{sex}"/>
-            <p class="text-danger" th:if="${#fields.hasErrors('sex')}" th:errors="*{sex}"></p>
+            <p class="text-danger" th:if="${#fields.hasErrors('sex')}" th:errors="*{sex}">Sex is mandatory (M or F)</p>
         </div>
         <div class="form-group">
             <label for="address">(Optional) Address:</label>

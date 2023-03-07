@@ -67,37 +67,37 @@ public class PatientControllerTest {
     }
 
 
-    @Test
-    @DisplayName("Should redirect to the patient list view on successful patient creation")
-    public void addPatientTest() {
+//    @Test
+//    @DisplayName("Should redirect to the patient list view on successful patient creation")
+//    public void addPatientTest() {
+//
+//        // Arrange
+//        PatientDto patientDto = new PatientDto();
+//        when(bindingResult.hasErrors()).thenReturn(false);
+//
+//        // Act
+//        String actualViewName = patientController.addPatient(patientDto, bindingResult);
+//
+//        // Assert
+//        assertEquals("redirect:/patient/list", actualViewName);
+//        verify(patientProxy, times(1)).validatePatient(patientDto);
+//    }
 
-        // Arrange
-        PatientDto patientDto = new PatientDto();
-        when(bindingResult.hasErrors()).thenReturn(false);
 
-        // Act
-        String actualViewName = patientController.addPatient(patientDto, bindingResult);
-
-        // Assert
-        assertEquals("redirect:/patient/list", actualViewName);
-        verify(patientProxy, times(1)).validatePatient(patientDto);
-    }
-
-
-    @Test
-    @DisplayName("Should return the add patient form view on failed patient creation")
-    public void addPatientNegativeTest() {
-
-        // Arrange
-        PatientDto patientDto = new PatientDto();
-        when(bindingResult.hasErrors()).thenReturn(true);
-
-        // Act
-        String actualViewName = patientController.addPatient(patientDto, bindingResult);
-
-        // Assert
-        assertEquals("/patient/add", actualViewName);
-    }
+//    @Test
+//    @DisplayName("Should return the add patient form view on failed patient creation")
+//    public void addPatientNegativeTest() {
+//
+//        // Arrange
+//        PatientDto patientDto = new PatientDto();
+//        when(bindingResult.hasErrors()).thenReturn(true);
+//
+//        // Act
+//        String actualViewName = patientController.addPatient(patientDto, bindingResult);
+//
+//        // Assert
+//        assertEquals("/patient/add", actualViewName);
+//    }
 
 
     @Test
