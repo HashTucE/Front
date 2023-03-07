@@ -84,12 +84,12 @@ public class PatientController {
         if (result.hasErrors()) {
             log.info("Validation errors for new patient: {}", patientDto);
             model.addAttribute("patientDto", patientDto);
-            return "/patient/add";
+            return "patient/add";
         }
 
         log.info("Validating a new patient: {}", patientDto);
         patientProxy.validatePatient(patientDto);
-        return "/patient/list";
+        return "redirect:/patient/list";
     }
 
 
@@ -138,7 +138,7 @@ public class PatientController {
             return "redirect:/patient/list";
         }
         log.debug("Error(s) updating patient with id {}: {}", id, result.getAllErrors());
-        return "/patient/update";
+        return "patient/update";
     }
 
 
