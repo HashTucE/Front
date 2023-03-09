@@ -2,11 +2,6 @@ package com.mediscreen.front.controller;
 
 import com.mediscreen.front.proxy.PatientProxy;
 import com.mediscreen.library.dto.PatientDto;
-import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.Schema;
-import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import jakarta.validation.Valid;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -17,8 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
-import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @Controller
@@ -41,10 +34,6 @@ public class PatientController {
      * @return the view to display the list of patients
      */
     @GetMapping("/patient/list")
-    @Operation(summary = "Get the list of patients",
-            description = "Retrieves a list of all patients in the system.")
-    @ApiResponse(responseCode = "200", description = "List of patients returned successfully",
-            content = @Content(mediaType = "text/html", schema = @Schema(type = "string")))
     public String home(Model model){
         log.info("Displaying the list of patients");
         List<PatientDto> patients =  patientProxy.getPatientsList();
@@ -59,10 +48,6 @@ public class PatientController {
      * @return the view to display the add patient form
      */
     @GetMapping("/patient/add")
-    @Operation(summary = "Display the form for adding a new patient",
-            description = "Displays the form for adding a new patient.")
-    @ApiResponse(responseCode = "200", description = "The form for adding a new patient is displayed",
-            content = @Content(mediaType = "text/html", schema = @Schema(type = "string")))
     public String addPatientForm(Model model) {
         log.info("Displaying the form for adding a patient");
         model.addAttribute("patientDto", new PatientDto());
@@ -77,8 +62,6 @@ public class PatientController {
      * @return the view to redirect to the list of patients or the add patient form
      */
     @PostMapping("/patient/validate")
-    @Operation(summary = "Add a new patient", description = "Adds a new patient to the system.")
-    @ApiResponse(responseCode = "302", description = "Patient validated and redirected to the list page.")
     public String addPatient(@Valid PatientDto patientDto, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
@@ -100,11 +83,6 @@ public class PatientController {
      * @return the view to display the update patient form
      */
     @GetMapping("/patient/update/{id}")
-    @Operation(summary = "Display the form to update a patient", description = "Display the form to update a patient")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Patient form displayed", content = @Content(mediaType = "text/html")),
-            @ApiResponse(responseCode = "404", description = "Patient not found", content = @Content(mediaType = "text/plain"))
-    })
     public String updatePatientForm(@PathVariable int id, Model model) {
 
         log.info("Displaying the form for updating the patient with id: {}", id);
@@ -122,10 +100,6 @@ public class PatientController {
      @return the view of the patient update page or the patient list page if the update was successful
      */
     @PostMapping("/patient/update/{id}")
-    @Operation(summary = "Update an existing patient", description = "Update an existing patient")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "302", description = "Patient updated successfully and redirected to the patient list page"),
-            @ApiResponse(responseCode = "400", description = "Bad request, validation error(s) occurred")})
     public String updatePatient(@PathVariable int id, @Valid PatientDto patientDto, BindingResult result) {
         log.debug("Updating patient with id {}", id);
         if (!result.hasErrors()) {
@@ -144,11 +118,6 @@ public class PatientController {
      @return the view of the patient list page
      */
     @PostMapping("/patient/delete/{id}")
-    @Operation(summary = "Delete a patient by ID", description = "Delete a patient by ID")
-    @ApiResponses(value = {
-            @ApiResponse(responseCode = "204", description = "Patient deleted"),
-            @ApiResponse(responseCode = "404", description = "Patient not found")
-    })
     public String deletePatient(@PathVariable int id) {
         log.debug("Deleting patient with id {}", id);
         patientProxy.deletePatient(id);
